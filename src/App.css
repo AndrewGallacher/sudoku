@@ -32,7 +32,64 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid;
+}
+
+tr {
+  height: 75px;
+}
+
+td {
+  width: 75px;
+  text-align: center;
+}
+
+.pencil {
+  color: lightgray;
+  font-size: medium;
+  font-style: italic;
+}
+
+.solution {
+  color: green;
+  font-size: xx-large;
+  font-weight: bold;
+  border-color: white;
+}
+
+.edit {
+  font-size: medium;
+}
+
+.row1, .row4, .row7 {
+  border-top: 4px solid;
+  border-color: white;
+}
+
+.row9 {
+  border-bottom: 4px solid;  
+  border-color: white;
+}
+
+.column1, .column4, .column7 {
+  border-left: 4px solid ;
+  border-color: white;
+}
+
+.column9 {
+  border-right: 4px solid;
+  border-color: white;
 }
