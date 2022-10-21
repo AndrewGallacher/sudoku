@@ -1,7 +1,6 @@
 import { CellModel } from "../models/CellModel";
 import { IStrategy } from "./IStrategy";
-import { ValidationStrategy, OnePossibleSolutionStrategy } from "./strategies";
-
+import { ValidationStrategy, OnePossibleSolutionStrategy, RowHasUniquePossibleSolution, ColumnHasUniquePossibleSolution, SquareHasUniquePossibleSolution } from "./strategies";
 
 class Puzzle {
 
@@ -23,7 +22,10 @@ class Puzzle {
         this._solvedCells = [];
         this._strategies = [
             new ValidationStrategy(),
-            new OnePossibleSolutionStrategy()
+            new OnePossibleSolutionStrategy(),
+            new RowHasUniquePossibleSolution(),
+            new ColumnHasUniquePossibleSolution(),
+            new SquareHasUniquePossibleSolution()
         ];
     }
 
@@ -84,7 +86,7 @@ class Puzzle {
     };
 
     applyCellSolution = (rowIndex: number, columnIndex: number, value: number): Puzzle => {
-   
+
         const thisCell = new CellModel(rowIndex, columnIndex);
         let squareIndex = thisCell.getSquareIndex(rowIndex, columnIndex);
 

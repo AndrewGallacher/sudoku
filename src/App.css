@@ -58,13 +58,14 @@ td {
 }
 
 .pencil {
-  color: lightgray;
+  color: grey;
+  border-color: white;
   font-size: medium;
   font-style: italic;
 }
 
 .solution {
-  color: green;
+  color: white;
   font-size: xx-large;
   font-weight: bold;
   border-color: white;

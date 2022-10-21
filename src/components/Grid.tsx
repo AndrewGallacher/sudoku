@@ -28,7 +28,6 @@ const Grid = (props: any) => {
 
     }, [props]);
 
-
     useEffect(() => {
         console.log('useEffect C');
 
@@ -36,6 +35,42 @@ const Grid = (props: any) => {
             return;
         }
 
+        // moderate
+        // const init = [
+        //     [3, 8, 0, 0, 0, 4, 0, 7, 0],
+        //     [4, 0, 0, 0, 6, 0, 0, 5, 1],
+        //     [0, 0, 0, 0, 9, 3, 0, 0, 0],
+        //     [0, 0, 0, 5, 0, 2, 6, 0, 4],
+        //     [0, 1, 7, 0, 0, 0, 5, 2, 0],
+        //     [2, 0, 5, 9, 0, 6, 0, 0, 0],
+        //     [0, 0, 0, 7, 4, 0, 0, 0, 0],
+        //     [5, 3, 0, 0, 8, 0, 0, 0, 7],
+        //     [0, 7, 0, 3, 0, 0, 0, 4, 6]
+        // ];
+
+        // challenging
+        const init = [
+            [0, 0, 0, 0, 8, 2, 0, 0, 0],
+            [0, 0, 0, 0, 5, 9, 4, 3, 2],
+            [0, 3, 0, 0, 0, 0, 0, 0, 5],
+            [6, 0, 0, 1, 9, 0, 5, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 4, 0, 7, 5, 0, 0, 6],
+            [1, 0, 0, 0, 0, 0, 0, 9, 0],
+            [5, 7, 3, 9, 6, 0, 0, 0, 0],
+            [0, 0, 0, 8, 4, 0, 0, 0, 0]
+        ];
+
+        for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+            for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
+                const solution = init[rowIndex][columnIndex];
+                if (solution > 0) {
+                    solveCell(rowIndex, columnIndex, solution);
+                }
+            }
+        }
+
+        /*
         solveCell(0, 0, 6);
         solveCell(0, 1, 5);
         solveCell(0, 3, 8);
@@ -80,7 +115,7 @@ const Grid = (props: any) => {
         solveCell(8, 5, 3);
         solveCell(8, 7, 9);
         solveCell(8, 8, 7);
-
+*/
     }, [puzzle, solveCell]);
 
     useEffect(() => {
