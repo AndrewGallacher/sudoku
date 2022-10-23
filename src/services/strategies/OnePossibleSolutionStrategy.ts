@@ -2,7 +2,7 @@ import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
 /**
- * 
+ * Finds any unsolved cell with only one possible solution
  */
 export class OnePossibleSolutionStrategy implements IStrategy {
     apply(cells: CellModel[]): CellModel[] {

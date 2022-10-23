@@ -1,9 +1,11 @@
 import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
+/**
+ * This doesn't solve anything but checks that the current status is still valid and that a full solution is still possible
+ */
 export class ValidationStrategy implements IStrategy {
     apply(cells: CellModel[]): CellModel[] {
-
 
         console.log('ValidationStrategy');
 

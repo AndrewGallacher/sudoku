@@ -1,10 +1,13 @@
-
 import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
+/**
+ * Look for square with a solution in only one row and remove that solution from the same row of other squares
+ */
 export class SquareHasSolutionInUniqueRowStrategy implements IStrategy {
 
     somePossibilitiesEliminated: boolean = false;
+
     setSomePossibilitiesEliminated = (value: boolean) => {
         this.somePossibilitiesEliminated = value;
     };
@@ -19,7 +22,6 @@ export class SquareHasSolutionInUniqueRowStrategy implements IStrategy {
         // for each square 
         for (let squareIndex = 0; squareIndex < 9; squareIndex++) {
 
-            //   const knownSolutions = [];
             const rowIndicesContainingSolution = new Map<number, number[]>();
             for (let solution = 1; solution < 10; solution++) {
 

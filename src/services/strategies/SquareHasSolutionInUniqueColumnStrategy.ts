@@ -1,9 +1,13 @@
 import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
+/**
+ * Look for square with a solution in only one column and remove that solution from the same column of other squares
+ */
 export class SquareHasSolutionInUniqueColumnStrategy implements IStrategy {
 
     somePossibilitiesEliminated: boolean = false;
+
     setSomePossibilitiesEliminated = (value: boolean) => {
         this.somePossibilitiesEliminated = value;
     };

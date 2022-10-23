@@ -1,11 +1,13 @@
 import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
+/**
+ * For each row, look for possible solutions that exist in only one cell
+ */
 export class RowHasUniquePossibleSolutionStrategy implements IStrategy {
     apply(cells: CellModel[]): CellModel[] {
 
         console.log('RowHasUniquePossibleSolutionStrategy');
-
         const solvedCells: CellModel[] = [];
         const rows: CellModel[][] = [[], [], [], [], [], [], [], [], []];
 

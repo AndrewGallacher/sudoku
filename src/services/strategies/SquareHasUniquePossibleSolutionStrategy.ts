@@ -1,6 +1,9 @@
 import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
+/**
+ * For each square, look for possible solutions that exist in only one cell
+ */
 export class SquareHasUniquePossibleSolutionStrategy implements IStrategy {
     apply(cells: CellModel[]): CellModel[] {
 
