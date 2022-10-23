@@ -1,10 +1,10 @@
 import { CellModel } from "../../models/CellModel";
 import { IStrategy } from "../IStrategy";
 
-export class SquareHasUniquePossibleSolution implements IStrategy {
+export class SquareHasUniquePossibleSolutionStrategy implements IStrategy {
     apply(cells: CellModel[]): CellModel[] {
 
-        console.log('SquareHasUniquePossibleSolution');
+        console.log('SquareHasUniquePossibleSolutionStrategy');
         const solvedCells: CellModel[] = [];
         const squares: CellModel[][] = [[], [], [], [], [], [], [], [], []];
 

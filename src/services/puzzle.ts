@@ -3,9 +3,9 @@ import { IStrategy } from "./IStrategy";
 import {
     ValidationStrategy,
     OnePossibleSolutionStrategy,
-    RowHasUniquePossibleSolution,
-    ColumnHasUniquePossibleSolution,
-    SquareHasUniquePossibleSolution,
+    RowHasUniquePossibleSolutionStrategy,
+    ColumnHasUniquePossibleSolutionStrategy,
+    SquareHasUniquePossibleSolutionStrategy,
     SquareHasSolutionInUniqueRowStrategy,
     SquareHasSolutionInUniqueColumnStrategy
 } from "./strategies";
@@ -32,9 +32,9 @@ class Puzzle {
         this._strategies = [
             new ValidationStrategy(),
             new OnePossibleSolutionStrategy(),
-            new RowHasUniquePossibleSolution(),
-            new ColumnHasUniquePossibleSolution(),
-            new SquareHasUniquePossibleSolution(),
+            new RowHasUniquePossibleSolutionStrategy(),
+            new ColumnHasUniquePossibleSolutionStrategy(),
+            new SquareHasUniquePossibleSolutionStrategy(),
             new SquareHasSolutionInUniqueRowStrategy(),
             new SquareHasSolutionInUniqueColumnStrategy()
         ];
