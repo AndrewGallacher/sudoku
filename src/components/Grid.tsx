@@ -99,7 +99,7 @@ const Grid = (props: any) => {
 
         for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
             for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
-                const solution = fiendish[rowIndex][columnIndex];
+                const solution = challenging2[rowIndex][columnIndex];
                 if (solution > 0) {
                     solveCell(rowIndex, columnIndex, solution);
                 }
