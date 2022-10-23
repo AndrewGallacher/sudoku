@@ -4,6 +4,8 @@ import { IStrategy } from "../IStrategy";
 export class RowHasUniquePossibleSolution implements IStrategy {
     apply(cells: CellModel[]): CellModel[] {
 
+        console.log('RowHasUniquePossibleSolution');
+
         const solvedCells: CellModel[] = [];
         const rows: CellModel[][] = [[], [], [], [], [], [], [], [], []];
 
@@ -32,6 +34,7 @@ export class RowHasUniquePossibleSolution implements IStrategy {
                         solvedCell.solution = solution;
                         solvedCell.possibleSolutions = [solution];
                         solvedCells.push(solvedCell);
+                        console.log(`Row ${solvedCell.rowIndex + 1}, column ${solvedCell.columnIndex + 1} has to be ${solvedCell.solution} - in this row it's the only cell with that possibility left`);
                     }
                 }
             }

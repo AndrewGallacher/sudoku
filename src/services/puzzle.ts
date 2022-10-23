@@ -1,6 +1,15 @@
 import { CellModel } from "../models/CellModel";
 import { IStrategy } from "./IStrategy";
-import { ValidationStrategy, OnePossibleSolutionStrategy, RowHasUniquePossibleSolution, ColumnHasUniquePossibleSolution, SquareHasUniquePossibleSolution } from "./strategies";
+import {
+    ValidationStrategy,
+    OnePossibleSolutionStrategy,
+    RowHasUniquePossibleSolution,
+    ColumnHasUniquePossibleSolution,
+    SquareHasUniquePossibleSolution,
+    SquareHasSolutionInUniqueRowStrategy,
+    SquareHasSolutionInUniqueColumnStrategy
+} from "./strategies";
+import { NullStrategy } from "./strategies/NullStrategy";
 
 class Puzzle {
 
@@ -25,7 +34,9 @@ class Puzzle {
             new OnePossibleSolutionStrategy(),
             new RowHasUniquePossibleSolution(),
             new ColumnHasUniquePossibleSolution(),
-            new SquareHasUniquePossibleSolution()
+            new SquareHasUniquePossibleSolution(),
+           new SquareHasSolutionInUniqueRowStrategy(),
+           new SquareHasSolutionInUniqueColumnStrategy()
         ];
     }
 
@@ -59,23 +70,35 @@ class Puzzle {
     solvePuzzle = () => {
 
         console.log('solvePuzzle');
-        let i = 0;
+        let iteration = 0;
+
+        const strategies: IStrategy[] = [];
 
         while (true) {
 
-            i++;
-            console.log('index', i);
+            iteration++;
+            console.log('iteration', iteration);
+            console.log('count or cells to be solved (before)', this._solvedCells.length);
 
-            for (let index in this._strategies) {
-                this._strategies[index].apply(this._cells).forEach(newSolution => this._solvedCells.push(newSolution));
+            for (let index in strategies) {
+                strategies[index].apply(this._cells).forEach(newSolution => this._solvedCells.push(newSolution));
             }
 
+            console.log('count or cells to be solved (after)', this._solvedCells.length);
+
             if (this._solvedCells.length === 0) {
-                return;
+
+                if (this._strategies.length > 0) {
+                    console.log('*** ADD NEW STRATEGY ***')
+                    strategies.unshift(this._strategies.shift() ?? new NullStrategy());
+                }
+                else {
+                    return;
+                }
             }
 
             while (this._solvedCells.length > 0) {
-                console.log('solvedCells', this._solvedCells.length);
+                // console.log('solvedCells', this._solvedCells.length);
                 const solvedCell: any = this._solvedCells.pop();
 
                 if (solvedCell !== null && solvedCell?.solution) {
@@ -85,50 +108,61 @@ class Puzzle {
         }
     };
 
-    applyCellSolution = (rowIndex: number, columnIndex: number, value: number): Puzzle => {
+    /**
+     * 
+     * @param rowIndex 
+     * @param columnIndex 
+     * @param solution 
+     * @returns 
+     */
+    applyCellSolution = (rowIndex: number, columnIndex: number, solution: number): Puzzle => {
 
-        const thisCell = new CellModel(rowIndex, columnIndex);
+        // Allow for dummy solution. Needed for strategies that elimenate possibilities without solving any cells.
+        if (rowIndex < 0 && columnIndex < 0) {
+            console.log('*** DUMMY SOLUTION ***');
+            return this;
+        }
+
+        // Find the cell to be solved
+        const thisCell = this._rows[rowIndex][columnIndex];
         let squareIndex = thisCell.getSquareIndex(rowIndex, columnIndex);
+
+        // If we were not told the solution, work it out or fail if we can't
+        if (solution === null) {
+            if (thisCell.possibleSolutions.length === 1) {
+                solution = thisCell.possibleSolutions[0];
+            }
+            else {
+                throw new Error('No identifiable solution');
+            }
+        }
 
         this.cells.forEach(cell => {
 
             if (cell.columnIndex === columnIndex && cell.rowIndex === rowIndex) {
-                cell.solution = value;
-                cell.possibleSolutions = [value];
+                // Apply the solution to the cell in question
+                cell.solution = solution;
+                cell.possibleSolutions = [solution];
             }
+            else {
+                // Eliminate from other cells in same row, ...
+                if (cell.columnIndex === columnIndex) {
+                    cell.eliminatePossibility(solution);
+                }
 
-            if (cell.columnIndex === columnIndex && cell.rowIndex !== rowIndex) {
-                this.removeSolutionFromOtherCells(cell, value);
-            }
+                // same column, ...
+                if (cell.rowIndex === rowIndex) {
+                    cell.eliminatePossibility(solution);
+                }
 
-            if (cell.rowIndex === rowIndex && cell.columnIndex !== columnIndex) {
-                this.removeSolutionFromOtherCells(cell, value);
-            }
-
-            if (cell.squareIndex === squareIndex && (cell.rowIndex !== rowIndex || cell.columnIndex !== columnIndex)) {
-                this.removeSolutionFromOtherCells(cell, value);
+                // or same square.
+                if (cell.squareIndex === squareIndex) {
+                    cell.eliminatePossibility(solution);
+                }
             }
         });
 
         return this;
-    };
-
-    removeSolutionFromOtherCells = (cell: CellModel, value: number): void => {
-        const remainingSolutions: number[] = [];
-
-        while (cell.possibleSolutions.length > 0) {
-            const possibleSolution = cell.possibleSolutions.pop();
-            if (possibleSolution !== undefined && possibleSolution !== value) {
-                remainingSolutions.push(possibleSolution);
-            }
-        }
-
-        while (remainingSolutions.length > 0) {
-            const remainingSolution = remainingSolutions.pop();
-            if (remainingSolution !== undefined) {
-                cell.possibleSolutions.push(remainingSolution);
-            }
-        }
     };
 
     get cells(): CellModel[] {
