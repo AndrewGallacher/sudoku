@@ -35,8 +35,8 @@ class Puzzle {
             new RowHasUniquePossibleSolution(),
             new ColumnHasUniquePossibleSolution(),
             new SquareHasUniquePossibleSolution(),
-           new SquareHasSolutionInUniqueRowStrategy(),
-           new SquareHasSolutionInUniqueColumnStrategy()
+            new SquareHasSolutionInUniqueRowStrategy(),
+            new SquareHasSolutionInUniqueColumnStrategy()
         ];
     }
 
@@ -125,7 +125,7 @@ class Puzzle {
 
         // Find the cell to be solved
         const thisCell = this._rows[rowIndex][columnIndex];
-        let squareIndex = thisCell.getSquareIndex(rowIndex, columnIndex);
+        const squareIndex = thisCell.squareIndex;
 
         // If we were not told the solution, work it out or fail if we can't
         if (solution === null) {
