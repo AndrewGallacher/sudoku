@@ -3,7 +3,7 @@ import { CellModel } from '../models/CellModel';
 import Puzzle from '../services/puzzle';
 import Row from './Row';
 
-const Grid = (props: any) => {
+const Grid = ({ position }: any) => {
 
     const [iteration, setIteration] = useState<number>(0);
     const [puzzle, setPuzzle] = useState<Puzzle>();
@@ -11,8 +11,6 @@ const Grid = (props: any) => {
 
     const solveCell = useCallback((rowIndex: number, columnIndex: number, solution: number): void => {
 
-      //   console.log('solveCell', `row: ${rowIndex}, coludmn: ${columnIndex}, solution: ${solution}`)
-    
         if (!puzzle) {
             throw Error('No puzzle to solve');
         }
@@ -22,90 +20,22 @@ const Grid = (props: any) => {
     }, [puzzle]);
 
     useEffect(() => {
-        //      console.log('useEffect A');
         setPuzzle(new Puzzle());
-
-
-    }, [props]);
+    }, []);
 
     useEffect(() => {
-        //     console.log('useEffect C');
-
-        if (!puzzle) {
-            return;
-        }
-
-        // easy 
-        const easy = [
-            [6, 5, 0, 8, 0, 0, 0, 4, 0],
-            [7, 0, 0, 0, 0, 0, 9, 2, 6],
-            [0, 0, 0, 6, 7, 1, 0, 5, 0],
-            [4, 0, 7, 0, 3, 0, 8, 0, 0],
-            [0, 0, 5, 7, 0, 8, 4, 0, 0],
-            [0, 0, 8, 0, 6, 0, 5, 0, 9],
-            [0, 9, 0, 2, 8, 7, 0, 0, 0],
-            [3, 7, 4, 0, 0, 0, 0, 0, 5],
-            [0, 1, 0, 0, 0, 3, 0, 9, 7]
-        ];
-        // moderate
-        const moderate = [
-            [3, 8, 0, 0, 0, 4, 0, 7, 0],
-            [4, 0, 0, 0, 6, 0, 0, 5, 1],
-            [0, 0, 0, 0, 9, 3, 0, 0, 0],
-            [0, 0, 0, 5, 0, 2, 6, 0, 4],
-            [0, 1, 7, 0, 0, 0, 5, 2, 0],
-            [2, 0, 5, 9, 0, 6, 0, 0, 0],
-            [0, 0, 0, 7, 4, 0, 0, 0, 0],
-            [5, 3, 0, 0, 8, 0, 0, 0, 7],
-            [0, 7, 0, 3, 0, 0, 0, 4, 6]
-        ];
-
-        // challenging
-        const challenging1 = [
-            [0, 0, 0, 0, 8, 2, 0, 0, 0],
-            [0, 0, 0, 0, 5, 9, 4, 3, 2],
-            [0, 3, 0, 0, 0, 0, 0, 0, 5],
-            [6, 0, 0, 1, 9, 0, 5, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 4, 0, 7, 5, 0, 0, 6],
-            [1, 0, 0, 0, 0, 0, 0, 9, 0],
-            [5, 7, 3, 9, 6, 0, 0, 0, 0],
-            [0, 0, 0, 8, 4, 0, 0, 0, 0]
-        ];
-
-        const challenging2 = [
-            [0, 7, 0, 0, 3, 0, 0, 2, 0],
-            [0, 5, 0, 1, 0, 7, 0, 0, 0],
-            [0, 0, 9, 0, 0, 0, 0, 0, 6],
-            [7, 0, 2, 5, 0, 0, 0, 8, 0],
-            [0, 0, 1, 0, 0, 0, 2, 0, 0],
-            [0, 9, 0, 0, 0, 2, 6, 0, 5],
-            [1, 0, 0, 0, 0, 0, 9, 0, 0],
-            [0, 0, 0, 7, 0, 6, 0, 3, 0],
-            [0, 3, 0, 0, 8, 0, 0, 6, 0]
-        ];
-
-        const fiendish = [
-            [0, 0, 0, 0, 5, 0, 0, 1, 0],
-            [0, 0, 0, 9, 0, 0, 5, 0, 0],
-            [0, 0, 4, 0, 0, 0, 0, 0, 6],
-            [0, 3, 0, 0, 0, 5, 0, 0, 0],
-            [7, 0, 0, 0, 0, 0, 4, 6, 2],
-            [0, 0, 0, 2, 0, 0, 0, 9, 5],
-            [0, 1, 0, 0, 7, 0, 0, 8, 0],
-            [2, 0, 0, 0, 1, 3, 6, 0, 7],
-            [0, 0, 3, 0, 2, 6, 0, 5, 0]
-        ];
-
-        for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
-            for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
-                const solution = fiendish[rowIndex][columnIndex];
-                if (solution > 0) {
-                    solveCell(rowIndex, columnIndex, solution);
+        if (puzzle && position) {
+            const startPosition: number[][] = require(`./puzzles/${position}.json`);
+            for (let rowIndex = 0; rowIndex < 9; rowIndex++) {
+                for (let columnIndex = 0; columnIndex < 9; columnIndex++) {
+                    const solution = startPosition[rowIndex][columnIndex];
+                    if (solution > 0) {
+                        solveCell(rowIndex, columnIndex, solution);
+                    }
                 }
             }
         }
-    }, [puzzle, solveCell]);
+    }, [position, puzzle, solveCell]);
 
     useEffect(() => {
 
