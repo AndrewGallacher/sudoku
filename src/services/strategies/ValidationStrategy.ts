@@ -5,6 +5,17 @@ import { IStrategy } from "../IStrategy";
  * This doesn't solve anything but checks that the current status is still valid and that a full solution is still possible
  */
 export class ValidationStrategy implements IStrategy {
+
+    unsolvedCellCount = 0;
+
+    incrementUnslovedCellCount = (): void => {
+
+        this.unsolvedCellCount++;
+
+    }
+
+
+
     apply(cells: CellModel[]): CellModel[] {
 
         console.log('ValidationStrategy');
@@ -50,7 +61,16 @@ export class ValidationStrategy implements IStrategy {
                 columnSolutionCounts[cell.columnIndex][solutionIndex] = 1;
                 squareSolutionCounts[cell.squareIndex][solutionIndex] = 1;
             }
+            else {
+                this.incrementUnslovedCellCount();
+            }
+
         });
+
+        console.log('unsolvedCellCount', this.unsolvedCellCount);
+        if (this.unsolvedCellCount === 0) {
+            debugger;
+        }
 
         return [];
     }

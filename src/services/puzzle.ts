@@ -1,3 +1,4 @@
+import { devNull } from "os";
 import { CellModel } from "../models/CellModel";
 import { IStrategy } from "./IStrategy";
 import {
@@ -7,7 +8,8 @@ import {
     ColumnHasUniquePossibleSolutionStrategy,
     SquareHasUniquePossibleSolutionStrategy,
     SquareHasSolutionInUniqueRowStrategy,
-    SquareHasSolutionInUniqueColumnStrategy
+    SquareHasSolutionInUniqueColumnStrategy,
+    LookAheadStrategy
 } from "./strategies";
 import { NullStrategy } from "./strategies/NullStrategy";
 
@@ -36,10 +38,15 @@ class Puzzle {
             new ColumnHasUniquePossibleSolutionStrategy(),
             new SquareHasUniquePossibleSolutionStrategy(),
             new SquareHasSolutionInUniqueRowStrategy(),
-            new SquareHasSolutionInUniqueColumnStrategy()
+            new SquareHasSolutionInUniqueColumnStrategy(),
+           new LookAheadStrategy()
         ];
     }
 
+    /**
+     * 
+     * @returns 
+     */
     initGrid = (): CellModel[] => {
 
         let cells: CellModel[] = [];
@@ -52,6 +59,9 @@ class Puzzle {
         return cells;
     };
 
+    /**
+     * 
+     */
     buildArrays = (): void => {
         for (let i = 0; i < 9; i++) {
             this._rows.push([]);
@@ -67,7 +77,11 @@ class Puzzle {
         }
     };
 
-    solvePuzzle = () => {
+    /**
+     * 
+     * @returns 
+     */
+    solvePuzzle = (): void => {
 
         console.log('solvePuzzle');
         let iteration = 0;
@@ -93,6 +107,7 @@ class Puzzle {
                     strategies.unshift(this._strategies.shift() ?? new NullStrategy());
                 }
                 else {
+                    //   this.tryLookAhead();
                     return;
                 }
             }
@@ -101,11 +116,33 @@ class Puzzle {
                 // console.log('solvedCells', this._solvedCells.length);
                 const solvedCell: any = this._solvedCells.pop();
 
-                if (solvedCell !== null && solvedCell?.solution) {
-                    this.applyCellSolution(solvedCell!.rowIndex, solvedCell!.columnIndex, solvedCell!.solution);
+                if (solvedCell !== null && solvedCell.solution) {
+                    this.applyCellSolution(solvedCell.rowIndex, solvedCell.columnIndex, solvedCell.solution);
                 }
             }
         }
+    };
+    /*
+        tryLookAhead = () => {
+    
+            const strategy = new LookAheadStrategy();
+            strategy.apply(this._cells).forEach(cell => this.applyCellSolution(cell.rowIndex, cell.columnIndex, cell.solution ?? 0));
+    
+        }
+    */
+
+    isSolved = (): boolean => {
+        this._cells.forEach(cell => {
+            if (cell.solution === null) {
+                return false;
+            }
+        });
+
+        debugger;
+        const strategy = new ValidationStrategy();
+        strategy.apply(this._cells);
+
+        return true;
     };
 
     /**

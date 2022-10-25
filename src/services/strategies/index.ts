@@ -5,3 +5,4 @@ export { ColumnHasUniquePossibleSolutionStrategy } from './ColumnHasUniquePossib
 export { SquareHasUniquePossibleSolutionStrategy } from './SquareHasUniquePossibleSolutionStrategy';
 export { SquareHasSolutionInUniqueRowStrategy } from './SquareHasSolutionInUniqueRowStrategy';
 export { SquareHasSolutionInUniqueColumnStrategy } from './SquareHasSolutionInUniqueColumnStrategy';
+export { LookAheadStrategy } from './LookAheadStrategy';
