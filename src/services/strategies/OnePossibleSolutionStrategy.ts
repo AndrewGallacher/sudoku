@@ -5,9 +5,13 @@ import { IStrategy } from "../IStrategy";
  * Finds any unsolved cell with only one possible solution
  */
 export class OnePossibleSolutionStrategy implements IStrategy {
+
+    name(): string {
+        return 'OnePossibleSolutionStrategy';
+    }
+
     apply(cells: CellModel[]): CellModel[] {
 
-        console.log('OnePossibleSolutionStrategy');
         const solvedCells: CellModel[] = [];
 
         cells.forEach(cell => {
