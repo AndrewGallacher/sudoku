@@ -20,7 +20,8 @@ const Grid = ({ position }: any) => {
     }, [puzzle]);
 
     useEffect(() => {
-        setPuzzle(new Puzzle());
+        // Start a new puzzle, allowing for look ahead
+        setPuzzle(new Puzzle(true));
     }, []);
 
     useEffect(() => {

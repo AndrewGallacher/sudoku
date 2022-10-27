@@ -12,9 +12,11 @@ export class SquareHasSolutionInUniqueRowStrategy implements IStrategy {
         this.somePossibilitiesEliminated = value;
     };
 
-    apply(cells: CellModel[]): CellModel[] {
+    name(): string {
+        return 'SquareHasSolutionInUniqueRowStrategy';
+    }
 
-        console.log('SquareHasSolutionInUniqueRowStrategy');
+    apply(cells: CellModel[]): CellModel[] {
 
         // This strategy may eliminate some possible solutions but will not necessarily solve any cells
         this.setSomePossibilitiesEliminated(false);

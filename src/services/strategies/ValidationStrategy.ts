@@ -8,17 +8,21 @@ export class ValidationStrategy implements IStrategy {
 
     unsolvedCellCount = 0;
 
-    incrementUnslovedCellCount = (): void => {
-
-        this.unsolvedCellCount++;
-
+    resetUnslovedCellCount = (): void => {
+        this.unsolvedCellCount = 0;
     }
 
+    incrementUnslovedCellCount = (): void => {
+        this.unsolvedCellCount++;
+    }
 
+    name(): string {
+        return 'ValidationStrategy';
+    }
 
     apply(cells: CellModel[]): CellModel[] {
 
-        console.log('ValidationStrategy');
+        this.resetUnslovedCellCount();
 
         const rowSolutionCounts: number[][] = [];
         const columnSolutionCounts: number[][] = [];
@@ -64,14 +68,9 @@ export class ValidationStrategy implements IStrategy {
             else {
                 this.incrementUnslovedCellCount();
             }
-
         });
 
-        console.log('unsolvedCellCount', this.unsolvedCellCount);
-        if (this.unsolvedCellCount === 0) {
-            debugger;
-        }
-
+        console.log('Unsolved cell count', this.unsolvedCellCount);
         return [];
     }
 }

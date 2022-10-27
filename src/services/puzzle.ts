@@ -1,4 +1,3 @@
-import { devNull } from "os";
 import { CellModel } from "../models/CellModel";
 import { IStrategy } from "./IStrategy";
 import {
@@ -15,14 +14,17 @@ import { NullStrategy } from "./strategies/NullStrategy";
 
 class Puzzle {
 
+    _useLookAhead: boolean;
     _cells: CellModel[];
     _rows: CellModel[][];
     _columns: CellModel[][];
     _squares: CellModel[][];
     _solvedCells: CellModel[];
     _strategies: IStrategy[];
+    _lookAheadStrategy: IStrategy = new LookAheadStrategy();
 
-    constructor() {
+    constructor(useLookAhead: boolean) {
+        this._useLookAhead = useLookAhead;
         this._cells = this.initGrid();
 
         this._rows = [];
@@ -38,8 +40,7 @@ class Puzzle {
             new ColumnHasUniquePossibleSolutionStrategy(),
             new SquareHasUniquePossibleSolutionStrategy(),
             new SquareHasSolutionInUniqueRowStrategy(),
-            new SquareHasSolutionInUniqueColumnStrategy(),
-           new LookAheadStrategy()
+            new SquareHasSolutionInUniqueColumnStrategy()
         ];
     }
 
@@ -91,29 +92,35 @@ class Puzzle {
         while (true) {
 
             iteration++;
-            console.log('iteration', iteration);
-            console.log('count or cells to be solved (before)', this._solvedCells.length);
+            console.log('Iteration', iteration);
+            console.log('count of cells to be solved', this._solvedCells.length);
 
             for (let index in strategies) {
-                strategies[index].apply(this._cells).forEach(newSolution => this._solvedCells.push(newSolution));
+                const strategy = strategies[index];
+                console.log('*** Strategy', strategy.name());
+                const solvedCells = strategy.apply(this._cells);
+                solvedCells.forEach(newSolution => this._solvedCells.push(newSolution));
             }
 
-            console.log('count or cells to be solved (after)', this._solvedCells.length);
-
             if (this._solvedCells.length === 0) {
-
                 if (this._strategies.length > 0) {
-                    console.log('*** ADD NEW STRATEGY ***')
                     strategies.unshift(this._strategies.shift() ?? new NullStrategy());
                 }
+                else if (this._useLookAhead) {
+                    const lookAheadSolutions: CellModel[] = this._lookAheadStrategy.apply(this._cells)
+                    if (lookAheadSolutions.length === 0) {
+                        return;
+                    }
+
+                    lookAheadSolutions.forEach(newSolution => this._solvedCells.push(newSolution));
+                    this._useLookAhead = false;
+                }
                 else {
-                    //   this.tryLookAhead();
                     return;
                 }
             }
 
             while (this._solvedCells.length > 0) {
-                // console.log('solvedCells', this._solvedCells.length);
                 const solvedCell: any = this._solvedCells.pop();
 
                 if (solvedCell !== null && solvedCell.solution) {
@@ -122,26 +129,16 @@ class Puzzle {
             }
         }
     };
-    /*
-        tryLookAhead = () => {
-    
-            const strategy = new LookAheadStrategy();
-            strategy.apply(this._cells).forEach(cell => this.applyCellSolution(cell.rowIndex, cell.columnIndex, cell.solution ?? 0));
-    
-        }
-    */
 
     isSolved = (): boolean => {
-        this._cells.forEach(cell => {
-            if (cell.solution === null) {
+        for (let index in this._cells) {
+            if (this._cells[index].solution === null) {
                 return false;
             }
-        });
+        }
 
-        debugger;
         const strategy = new ValidationStrategy();
         strategy.apply(this._cells);
-
         return true;
     };
 
@@ -156,7 +153,6 @@ class Puzzle {
 
         // Allow for dummy solution. Needed for strategies that elimenate possibilities without solving any cells.
         if (rowIndex < 0 && columnIndex < 0) {
-            console.log('*** DUMMY SOLUTION ***');
             return this;
         }
 

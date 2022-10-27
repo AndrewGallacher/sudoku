@@ -6,7 +6,7 @@ function App() {
   return (
     <div>
       <header className="App-header">
-        <Grid position='challenging2' />
+        <Grid position='challenging3' />
       </header>
     </div>
   );

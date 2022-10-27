@@ -5,9 +5,13 @@ import { IStrategy } from "../IStrategy";
  * For each square, look for possible solutions that exist in only one cell
  */
 export class SquareHasUniquePossibleSolutionStrategy implements IStrategy {
+
+    name(): string {
+        return 'SquareHasUniquePossibleSolutionStrategy';
+    }
+
     apply(cells: CellModel[]): CellModel[] {
 
-        console.log('SquareHasUniquePossibleSolutionStrategy');
         const solvedCells: CellModel[] = [];
         const squares: CellModel[][] = [[], [], [], [], [], [], [], [], []];
 

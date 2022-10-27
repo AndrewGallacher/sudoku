@@ -20,14 +20,10 @@ export class LookAheadStrategy implements IStrategy {
         this.startingPosition = cells;
     };
 
-
+    // create a new puzzle to work with
     clonePuzzle = (): Puzzle => {
-
-        // create a new puzzle to work with 
-        const puzzle = new Puzzle();
-
+        const puzzle = new Puzzle(false);
         this.startingPosition.forEach(cell => {
-            // Clone the current situation to the new puzzle
             if (cell.solution) {
                 puzzle.applyCellSolution(cell.rowIndex, cell.columnIndex, cell.solution);
             }
@@ -36,9 +32,11 @@ export class LookAheadStrategy implements IStrategy {
         return puzzle;
     };
 
+    name(): string {
+        return 'LookAheadStrategy';
+    }
 
     apply(cells: CellModel[]): CellModel[] {
-        console.log('LookAheadStrategy');
 
         this.captureStartingPosition(cells);
 
@@ -47,9 +45,9 @@ export class LookAheadStrategy implements IStrategy {
         for (let count = 2; count < 9; count++) {
             unsolvedCells.set(count, []);
         }
-        cells.forEach(cell => {
 
-            // ... and populate the list of unsolved cells 
+        cells.forEach(cell => {
+            // Populate the list of unsolved cells 
             if (cell.possibleSolutions.length > 1) {
                 unsolvedCells.get(cell.possibleSolutions.length)!.push(cell);
             }
@@ -60,59 +58,47 @@ export class LookAheadStrategy implements IStrategy {
         while (outcomeUncertain) {
 
             console.log('solutionCount', solutionCount);
-            //         debugger;
 
             while (unsolvedCells.get(solutionCount)!.length > 0) {
 
-                const tryThisCell = unsolvedCells.get(solutionCount)!.pop(); ///  ?? throw new Error('asdsa');
+                // We are going to try each of the solutions for this cell
+                const tryThisCell = unsolvedCells.get(solutionCount)!.pop()!;
+
+                // Capture the possible solutions so that we can reset second time round
+                const originalSolutions: number[] = [...tryThisCell.possibleSolutions]
+
                 if (tryThisCell) {
-                    console.log(`Trying row ${tryThisCell.rowIndex + 1}, column ${tryThisCell.columnIndex + 1} `);
+                    console.log(`Trying row ${tryThisCell.rowIndex + 1}, column ${tryThisCell.columnIndex + 1}`);
 
-                    for (var solutionIndex in tryThisCell.possibleSolutions) {
-                        const tryThisSolution: number = tryThisCell.possibleSolutions[solutionIndex];
-                        console.log(`Trying solution ${tryThisSolution}`);
-
-                        tryThisCell.solution = tryThisSolution;
+                    for (var solutionIndex in originalSolutions) {
+                        const tryThisSolution: number = originalSolutions[solutionIndex];
+                        console.log(`- with solution ${tryThisSolution}`);
 
                         // at this point we need to clone the puzzle we started with and apply this solution to that puzzle 
                         const puzzle = this.clonePuzzle();
-                        puzzle.applyCellSolution(tryThisCell.rowIndex, tryThisCell.columnIndex, tryThisCell.solution!);
+                        puzzle.applyCellSolution(tryThisCell.rowIndex, tryThisCell.columnIndex, tryThisSolution!);
 
                         try {
                             puzzle.solvePuzzle();
-
                             if (puzzle.isSolved()) {
-
-                                debugger;
-                                for (let index in cells) {
-                                    if (cells[index].rowIndex === tryThisCell.rowIndex && cells[index].columnIndex === tryThisCell.columnIndex) {
-
-                                        cells[index].solution = tryThisSolution;
-                                        cells[index].possibleSolutions = [tryThisSolution];
-
-                                        return [cells[index]];
-                                    }
-                                }
-
-                                debugger;
+                                return puzzle._cells;
                             }
                         } catch (error) {
-                            debugger;
-                            console.error(error);
-                            tryThisCell.solution = null;
-                            // tryThisCell.possibleSolutions.push(tryThisSolution);
+                            // Do nothing
                         }
+
+                        tryThisCell.solution = null;
+                        tryThisCell.possibleSolutions = [...originalSolutions];
                     }
                 }
             }
 
             solutionCount++;
-            if (solutionCount > 8) {
+            if (solutionCount > 5) {
                 outcomeUncertain = false;
             }
         }
 
-        debugger;
         return [];
     }
 }
