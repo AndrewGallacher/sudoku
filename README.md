@@ -1,6 +1,8 @@
 # Sudoku Solver
 
-This is a React app for solving sudoku puzzles and displaying the solution.
+This project is a React app for solving sudoku puzzles and displaying the solution.
+It was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)
+using TypeScript.
 
 ## Getting Started
 
@@ -8,7 +10,7 @@ Create a JSON file in `/src/components/puzzles` with a starting position represe
 
 Set the `position` property of the `Grid` component in `App.tsx` with the name of this JSON file.
 
-`npm start`
+`yarn start`
 
 Select `Solve`
 
@@ -80,3 +82,4 @@ The `NullStrategy` does not do anything.
 
 Solving the puzzle involves iterating through all the strategies and solving all of the cells that they identify.
 Where no new solvable cells are identified we use the look ahead strategy.
+The validation strategy is used in each iteration to check that we have not arrived at an invalid and impossible sitaution.
