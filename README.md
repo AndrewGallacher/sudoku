@@ -1,46 +1,82 @@
-# Getting Started with Create React App
+# Sudoku Solver
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a React app for solving sudoku puzzles and displaying the solution.
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+Create a JSON file in `/src/components/puzzles` with a starting position represented as an array or arrays.
 
-### `npm start`
+Set the `position` property of the `Grid` component in `App.tsx` with the name of this JSON file.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`npm start`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Select `Solve`
 
-### `npm test`
+## Terminology
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+There are many squares in a sudoku puzzle.
+The smallest squares in a puzzle are the 81 individual squares that can each hold one digit.
+This project uses the word "cell" for this component.
+The word "square" is used to described the 9 x 9 squares, each of which must have the digits from 1 to 9 exactly one time.
+There are 9 squares.
+Similarly, there are 9 "rows" and 9 "columns", each of which must also have the digits 1 to 9 exactly once for the puzzle to be solved.
+The word "puzzle" is used to describe the overall grid.
 
-### `npm run build`
+So, one puzzle has:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 9 squares,
+- 9 rows,
+- 9 columns, and
+- 81 cells.
+  
+## Strategies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The solver uses a collection of "strategies" to solve a puzzle.
+There are four types of stategy:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Solve individual cells
 
-### `npm run eject`
+These strategies will identify a list of cells that have a definite solution.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+`OnePossibleSolutionStrategy` identifies unsolved cells that have only one solution.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+For each row, `RowHasUniquePossibleSolutionStrategy` identifies solutions that only
+exist as a possible solution for one cell in that row.
+That must be the solution for that cell.
+`ColumnHasUniquePossibleSolutionStrategy` and `SquareHasUniquePossibleSolutionStrategy` do the same operation
+but for each column and square respectively.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Eliminate Possibilities
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+These strategies may not identify any cells that can be solved now,
+but do identify possible solutions that can be eliminated.
+This may help other strategies to solve those cells.
 
-## Learn More
+For each square, `SquareHasSolutionInUniqueRowStrategy` identifies solutions that only exist in one row.
+That solution, therefore, cannot be a solution for any cell in the same row in a different square.
+`SquareHasSolutionInUniqueColumnStrategy` performs the same operation but looks for solution that only
+exists in a single column of a square.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Look Ahead Strategy
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+There is one special strategy called the look ahead strategy.
+This is only used when all of the above strategies cannot arrive at a final solution.
+Starting with the cells that have the fewest number of possible solutions remaining, we try each solution
+for each cell, one at a time, and see if that solution leads to a final solution.
+
+At this stage of development, the engine only supports one level of look ahead.
+The assumption is that any puzzle can be solved by using this strategy only onmce.
+
+### Dummy Stategies
+
+There are two special strategies that do not help to solve the puzzle in any way.
+
+`ValidationStrategy` tests the current status of a puzzle for the following invalidities:
+
+- Are there any unsolved cells with no remaining possible solutions?
+- Has any solution been used more than once in any row, column or square
+
+The `NullStrategy` does not do anything.
+
+Solving the puzzle involves iterating through all the strategies and solving all of the cells that they identify.
+Where no new solvable cells are identified we use the look ahead strategy.
