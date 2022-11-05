@@ -75,22 +75,36 @@ td {
   font-size: medium;
 }
 
-.row1, .row4, .row7 {
+.row1,
+.row4,
+.row7 {
   border-top: 4px solid;
   border-color: white;
 }
 
 .row9 {
-  border-bottom: 4px solid;  
+  border-bottom: 4px solid;
   border-color: white;
 }
 
-.column1, .column4, .column7 {
-  border-left: 4px solid ;
+.column1,
+.column4,
+.column7 {
+  border-left: 4px solid;
   border-color: white;
 }
 
 .column9 {
   border-right: 4px solid;
   border-color: white;
+}
+
+input {
+  font-size: large;
+  width: 8em;
+  padding: 10px;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  float: left;
 }

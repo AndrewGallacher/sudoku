@@ -104,9 +104,11 @@ const Grid = ({ position }: any) => {
           ))}
         </tbody>
       </table>
-      <input type="button" value="Clear" onClick={handleClearClick} />
-      <input type="button" value="Reset" onClick={handleResetClick} />
-      <input type="button" value="Solve" onClick={handleSolveClick} />
+      <div>
+        <input type="button" value="Clear" onClick={handleClearClick} />
+        <input type="button" value="Reset" onClick={handleResetClick} />
+        <input type="button" value="Solve" onClick={handleSolveClick} />
+      </div>
     </>
   );
 };
