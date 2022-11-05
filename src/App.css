@@ -99,7 +99,7 @@ td {
   border-color: white;
 }
 
-input {
+input[type="button"] {
   font-size: large;
   width: 8em;
   padding: 10px;
@@ -107,4 +107,12 @@ input {
   margin-left: 10px;
   margin-right: 10px;
   float: left;
+}
+
+input[type="text"] {
+  color: blue;
+  font-size: xx-large;
+  font-weight: bold;
+  border: none;
+  width: 100%;
 }
