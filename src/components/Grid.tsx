@@ -8,6 +8,8 @@ const Grid = ({ position }: any) => {
   const [puzzle, setPuzzle] = useState<Puzzle>();
   const [rows, setRows] = useState<CellModel[][]>([]);
   const [loadStartingPosition, setLoadStartingPosition] = useState(false);
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number>(-1);
 
   const solveCell = useCallback(
     (rowIndex: number, columnIndex: number, solution: number): void => {
@@ -22,6 +24,11 @@ const Grid = ({ position }: any) => {
     },
     [puzzle]
   );
+
+  const editCell = (rowIndex: number, columnIndex: number) => {
+    setSelectedRowIndex(rowIndex);
+    setSelectedColumnIndex(columnIndex);
+  };
 
   // Initial setup
   useEffect(() => {
@@ -100,7 +107,14 @@ const Grid = ({ position }: any) => {
       <table>
         <tbody>
           {rows.map((row, index) => (
-            <Row key={index} cells={row} solveCell={solveCell} />
+            <Row 
+              key={index} 
+              cells={row} 
+              solveCell={solveCell} 
+              editCell={editCell}
+              selectedRowIndex={selectedRowIndex}
+              selectedColumnIndex={selectedColumnIndex}
+              />
           ))}
         </tbody>
       </table>

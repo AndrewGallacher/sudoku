@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { CellModel } from "../models/CellModel";
 
 interface CellProps {
   cell: CellModel;
   solveCell: (arg0: number, arg1: number, arg2: number) => void;
+  editCell: (rowIndex: number, columnIndex: number) => void;
+  selectedRowIndex: number;
+  selectedColumnIndex: number;
 }
 
 const Cell: React.FunctionComponent<CellProps> = ({
   cell,
   solveCell,
+  editCell,
+  selectedRowIndex,
+  selectedColumnIndex,
 }): JSX.Element => {
-  const [editMode, setEditMode] = useState(false);
-
   const handleClick = (): void => {
-    setEditMode(true);
+    editCell(cell.rowIndex, cell.columnIndex);
   };
 
   const handleEditKeyUp = (e: any): void => {
@@ -22,7 +26,7 @@ const Cell: React.FunctionComponent<CellProps> = ({
       solveCell(cell.rowIndex, cell.columnIndex, solution);
     }
 
-    setEditMode(false);
+    editCell(-1, -1);
   };
 
   const getClassName = (value: string): string => {
@@ -31,13 +35,20 @@ const Cell: React.FunctionComponent<CellProps> = ({
 
   // If solved, show solution
   if (cell.solution) {
-    return <td className={getClassName("solution")}>{cell.solution}</td>;
+    return (
+      <td className={getClassName("solution")} onClick={handleClick}>
+        {cell.solution}
+      </td>
+    );
   }
 
   // Edit mode?
-  if (editMode) {
+  if (
+    cell.rowIndex === selectedRowIndex &&
+    cell.columnIndex === selectedColumnIndex
+  ) {
     return (
-      <td>
+      <td className={getClassName("edit")}>
         <input type="text" autoFocus onKeyUpCapture={handleEditKeyUp} />
       </td>
     );
