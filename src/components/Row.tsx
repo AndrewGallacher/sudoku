@@ -1,5 +1,5 @@
 import React from "react";
-import { CellModel } from "../models/CellModel";
+import { CellModel } from "../services/CellModel";
 import Cell from "./Cell";
 
 interface RowProps {

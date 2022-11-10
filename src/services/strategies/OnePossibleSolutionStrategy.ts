@@ -1,12 +1,12 @@
-import { CellModel } from '../../models/CellModel';
-import { IStrategy } from '../IStrategy';
+import { CellModel } from "../CellModel";
+import { IStrategy } from "../IStrategy";
 
 /**
  * Finds any unsolved cell with only one possible solution
  */
 export class OnePossibleSolutionStrategy implements IStrategy {
   name(): string {
-    return 'OnePossibleSolutionStrategy';
+    return "OnePossibleSolutionStrategy";
   }
 
   apply(cells: CellModel[]): CellModel[] {
@@ -19,7 +19,7 @@ export class OnePossibleSolutionStrategy implements IStrategy {
         console.log(
           `Row ${cell.rowIndex + 1}, column ${cell.columnIndex + 1} has to be ${
             cell.solution
-          } - it's the only possibility`,
+          } - it's the only possibility`
         );
       }
     });

@@ -1,12 +1,12 @@
-import { CellModel } from '../../models/CellModel';
-import { IStrategy } from '../IStrategy';
+import { CellModel } from "../CellModel";
+import { IStrategy } from "../IStrategy";
 
 /**
  * For each square, look for possible solutions that exist in only one cell
  */
 export class SquareHasUniquePossibleSolutionStrategy implements IStrategy {
   name(): string {
-    return 'SquareHasUniquePossibleSolutionStrategy';
+    return "SquareHasUniquePossibleSolutionStrategy";
   }
 
   apply(cells: CellModel[]): CellModel[] {
@@ -23,7 +23,9 @@ export class SquareHasUniquePossibleSolutionStrategy implements IStrategy {
         let indexOfSolution: number = -1;
 
         for (let index = 0; index < 9; index++) {
-          if (squares[squareIndex][index].possibleSolutions.includes(solution)) {
+          if (
+            squares[squareIndex][index].possibleSolutions.includes(solution)
+          ) {
             count++;
             indexOfSolution = index;
           }
@@ -37,9 +39,11 @@ export class SquareHasUniquePossibleSolutionStrategy implements IStrategy {
             solvedCell.possibleSolutions = [solution];
             solvedCells.push(solvedCell);
             console.log(
-              `Row ${solvedCell.rowIndex + 1}, column ${solvedCell.columnIndex + 1} has to be ${
+              `Row ${solvedCell.rowIndex + 1}, column ${
+                solvedCell.columnIndex + 1
+              } has to be ${
                 solvedCell.solution
-              } - in this square it's the only cell with that possibility left`,
+              } - in this square it's the only cell with that possibility left`
             );
           }
         }

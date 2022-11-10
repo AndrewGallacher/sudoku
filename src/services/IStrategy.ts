@@ -1,4 +1,4 @@
-import { CellModel } from '../models/CellModel';
+import { CellModel } from "./CellModel";
 
 /**
  * Interface for all strategies for solving sudoku
