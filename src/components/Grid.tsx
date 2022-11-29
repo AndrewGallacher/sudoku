@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { CellModel } from "../models/CellModel";
+import { CellModel } from "../services/CellModel";
 import Puzzle from "../services/puzzle";
 import Row from "./Row";
 
@@ -107,14 +107,14 @@ const Grid = ({ position }: any) => {
       <table>
         <tbody>
           {rows.map((row, index) => (
-            <Row 
-              key={index} 
-              cells={row} 
-              solveCell={solveCell} 
+            <Row
+              key={index}
+              cells={row}
+              solveCell={solveCell}
               editCell={editCell}
               selectedRowIndex={selectedRowIndex}
               selectedColumnIndex={selectedColumnIndex}
-              />
+            />
           ))}
         </tbody>
       </table>

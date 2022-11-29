@@ -1,4 +1,4 @@
-import { CellModel } from "../models/CellModel";
+import { CellModel } from "./CellModel";
 import { IStrategy } from "./IStrategy";
 import {
   ValidationStrategy,
