@@ -19,7 +19,7 @@ Select `Solve`
 There are many squares in a sudoku puzzle.
 The smallest squares in a puzzle are the 81 individual squares that can each hold one digit.
 This project uses the word "cell" for this component.
-The word "square" is used to described the 9 x 9 squares, each of which must have the digits from 1 to 9 exactly one time.
+The word "square" is used to described the 3 x 3 squares, each of which must have the digits from 1 to 9 exactly one time.
 There are 9 squares.
 Similarly, there are 9 "rows" and 9 "columns", each of which must also have the digits 1 to 9 exactly once for the puzzle to be solved.
 The word "puzzle" is used to describe the overall grid.
@@ -67,7 +67,7 @@ Starting with the cells that have the fewest number of possible solutions remain
 for each cell, one at a time, and see if that solution leads to a final solution.
 
 At this stage of development, the engine only supports one level of look ahead.
-The assumption is that any puzzle can be solved by using this strategy only onmce.
+The assumption is that any puzzle can be solved by using this strategy only once.
 
 ### Dummy Stategies
 
