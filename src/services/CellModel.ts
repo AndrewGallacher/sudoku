@@ -12,6 +12,8 @@ export class CellModel {
 
   possibleSolutions: number[];
 
+  isValid: boolean;
+
   /**
    * Works out the 0-based sqaure index of the current cell
    * @returns 0 to 8 (left-to-right, then top-to-bottom)
@@ -61,5 +63,6 @@ export class CellModel {
     this.squareIndex = this.getSquareIndex();
     this.solution = null;
     this.possibleSolutions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    this.isValid = true;
   }
 }
