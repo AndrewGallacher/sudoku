@@ -21,6 +21,12 @@ const Cell: React.FunctionComponent<CellProps> = ({
   };
 
   const handleEditKeyUp = (e: any): void => {
+    if (e.code === "Escape") {
+      // Leave edit mode
+      editCell(-1, -1);
+      return;
+    }
+
     if (e.code === "Backspace") {
       let rowIndex = cell.rowIndex;
       let columnIndex = cell.columnIndex;
