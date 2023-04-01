@@ -59,6 +59,56 @@ class Puzzle {
   };
 
   /**
+   * Recalculates the possible solutions based on current set of solutions
+   */
+  checkGrid = (): void => {
+    // Reset all cells to have all solutions
+    for (let i in this._cells) {
+      const cell = this._cells[i];
+      cell.possibleSolutions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      cell.isValid = true;
+    }
+
+    // Solve all known cells
+    for (let i in this._cells) {
+      const cell = this._cells[i];
+      if (cell.solution) {
+        this.applyCellSolution(cell.rowIndex, cell.columnIndex, cell.solution);
+
+        this._rows[cell.rowIndex].forEach((other) => {
+          if (
+            other.columnIndex !== cell.columnIndex &&
+            other.solution === cell.solution
+          ) {
+            other.isValid = false;
+            cell.isValid = false;
+          }
+        });
+
+        this._columns[cell.columnIndex].forEach((other) => {
+          if (
+            other.rowIndex !== cell.rowIndex &&
+            other.solution === cell.solution
+          ) {
+            other.isValid = false;
+            cell.isValid = false;
+          }
+        });
+
+        this._squares[cell.squareIndex].forEach((other) => {
+          if (
+            (other.rowIndex !== cell.rowIndex || other.columnIndex !== cell.columnIndex ) &&
+            other.solution === cell.solution
+          ) {
+            other.isValid = false;
+            cell.isValid = false;
+          }
+        });
+      }
+    }
+  };
+
+  /**
    *
    */
   buildArrays = (): void => {
@@ -166,6 +216,13 @@ class Puzzle {
     // Find the cell to be solved
     const thisCell = this._rows[rowIndex][columnIndex];
     const squareIndex = thisCell.squareIndex;
+
+    // Reset cell if 0 given
+    if (solution === 0) {
+      thisCell.solution = null;
+      thisCell.possibleSolutions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      return this;
+    }
 
     // If we were not told the solution, work it out or fail if we can't
     if (solution === null) {
