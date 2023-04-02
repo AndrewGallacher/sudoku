@@ -97,7 +97,8 @@ class Puzzle {
 
         this._squares[cell.squareIndex].forEach((other) => {
           if (
-            (other.rowIndex !== cell.rowIndex || other.columnIndex !== cell.columnIndex ) &&
+            (other.rowIndex !== cell.rowIndex ||
+              other.columnIndex !== cell.columnIndex) &&
             other.solution === cell.solution
           ) {
             other.isValid = false;
@@ -182,6 +183,40 @@ class Puzzle {
         }
       }
     }
+  };
+
+  /**
+   * XXX
+   */
+  save = (): void => {
+    const x = JSON.stringify(this._cells);
+    localStorage.setItem("puzzle", x);
+  };
+
+  /**
+   * XXX
+   * @returns
+   */
+  load = (): Puzzle => {
+   
+    const storage = JSON.parse(localStorage.getItem("puzzle") ?? "[]")  ;
+    this._cells = [];
+
+    storage.forEach( (item: CellModel) => {
+
+      const cell = new CellModel ( item.rowIndex, item.columnIndex)  ;
+      cell.possibleSolutions = item.possibleSolutions;
+      this._cells.push ( cell) ;
+    } );
+
+
+    // debugger ;
+    this._rows = [];
+    this._columns = [];
+    this._squares = [];
+    this.buildArrays();
+
+    return this;
   };
 
   isSolved = (): boolean => {

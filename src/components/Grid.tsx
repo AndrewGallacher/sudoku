@@ -84,6 +84,14 @@ const Grid = ({ position }: any) => {
     return `(${rowIndex},${columnIndex})`;
   };
 
+  const handleSaveClick = (): void => {
+    puzzle?.save();
+  };
+
+  const handleLoadClick = (): void => {
+    setPuzzle(puzzle?.load());
+  };
+
   const handleClearClick = (): void => {
     editCell(-1, -1);
     setPuzzle(new Puzzle(true));
@@ -128,6 +136,8 @@ const Grid = ({ position }: any) => {
         </tbody>
       </table>
       <div>
+        <input type="button" value="Save" onClick={handleSaveClick} />
+        <input type="button" value="Load" onClick={handleLoadClick} />
         <input type="button" value="Clear" onClick={handleClearClick} />
         <input type="button" value="Check" onClick={handleCheckClick} />
         <input type="button" value="Reset" onClick={handleResetClick} />
