@@ -186,29 +186,29 @@ class Puzzle {
   };
 
   /**
-   * XXX
+   * Save the current position
    */
-  save = (): void => {
-    const x = JSON.stringify(this._cells);
-    localStorage.setItem("puzzle", x);
+  save = (name: string): void => {
+    const grid = JSON.stringify(this._cells);
+    localStorage.setItem(name, grid);
   };
 
   /**
-   * XXX
+   * Load the specified position
    * @returns
    */
-  load = (): Puzzle => {
-   
-    const storage = JSON.parse(localStorage.getItem("puzzle") ?? "[]")  ;
+  load = (name: string): Puzzle => {
+    debugger;
+    const storage = JSON.parse(localStorage.getItem(name) ?? "[]");
     this._cells = [];
 
-    storage.forEach( (item: CellModel) => {
-
-      const cell = new CellModel ( item.rowIndex, item.columnIndex)  ;
+    storage.forEach((item: CellModel) => {
+      const cell = new CellModel(item.rowIndex, item.columnIndex);
+      cell.solution = item.solution;
+      cell.isValid = item.isValid;
       cell.possibleSolutions = item.possibleSolutions;
-      this._cells.push ( cell) ;
-    } );
-
+      this._cells.push(cell);
+    });
 
     // debugger ;
     this._rows = [];

@@ -18,9 +18,7 @@ const Grid = ({ position }: any) => {
       }
 
       setPuzzle(puzzle.applyCellSolution(rowIndex, columnIndex, solution));
-      setIteration((i: number) => {
-        return i + 1;
-      });
+      incrementIteration();
     },
     [puzzle]
   );
@@ -84,12 +82,21 @@ const Grid = ({ position }: any) => {
     return `(${rowIndex},${columnIndex})`;
   };
 
+  const handleUndoClick = (): void => {
+     //
+  };
+
+  const handleRedoClick = (): void => {
+    //
+ };
+
   const handleSaveClick = (): void => {
-    puzzle?.save();
+    puzzle?.save("andrew");
   };
 
   const handleLoadClick = (): void => {
-    setPuzzle(puzzle?.load());
+    setPuzzle(puzzle?.load("andrew"));
+    incrementIteration();
   };
 
   const handleClearClick = (): void => {
@@ -114,6 +121,10 @@ const Grid = ({ position }: any) => {
   const handleSolveClick = (): void => {
     editCell(-1, -1);
     puzzle?.solvePuzzle();
+    incrementIteration();
+  };
+
+  const incrementIteration = (): void => {
     setIteration((i: number) => {
       return i + 1;
     });
@@ -136,6 +147,8 @@ const Grid = ({ position }: any) => {
         </tbody>
       </table>
       <div>
+        <input type="button" value="Undo" onClick={handleUndoClick} />
+        <input type="button" value="Redo" onClick={handleRedoClick} />
         <input type="button" value="Save" onClick={handleSaveClick} />
         <input type="button" value="Load" onClick={handleLoadClick} />
         <input type="button" value="Clear" onClick={handleClearClick} />
