@@ -99,6 +99,10 @@ td {
   border-color: white;
 }
 
+.invalid {
+  color: red;
+}
+
 input[type="button"] {
   font-size: large;
   width: 8em;

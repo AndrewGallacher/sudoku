@@ -28,6 +28,7 @@ const Grid = ({ position }: any) => {
   const editCell = (rowIndex: number, columnIndex: number) => {
     setSelectedRowIndex(rowIndex);
     setSelectedColumnIndex(columnIndex);
+    puzzle?.checkGrid();
   };
 
   // Initial setup
@@ -83,19 +84,35 @@ const Grid = ({ position }: any) => {
     return `(${rowIndex},${columnIndex})`;
   };
 
+  const handleSaveClick = (): void => {
+    puzzle?.save();
+  };
+
+  const handleLoadClick = (): void => {
+    setPuzzle(puzzle?.load());
+  };
+
   const handleClearClick = (): void => {
+    editCell(-1, -1);
     setPuzzle(new Puzzle(true));
     setIteration(0);
     setLoadStartingPosition(false);
   };
 
+  const handleCheckClick = (): void => {
+    puzzle?.checkGrid();
+    setIteration(0);
+  };
+
   const handleResetClick = (): void => {
+    editCell(-1, -1);
     setPuzzle(new Puzzle(true));
     setIteration(0);
     setLoadStartingPosition(true);
   };
 
   const handleSolveClick = (): void => {
+    editCell(-1, -1);
     puzzle?.solvePuzzle();
     setIteration((i: number) => {
       return i + 1;
@@ -119,7 +136,10 @@ const Grid = ({ position }: any) => {
         </tbody>
       </table>
       <div>
+        <input type="button" value="Save" onClick={handleSaveClick} />
+        <input type="button" value="Load" onClick={handleLoadClick} />
         <input type="button" value="Clear" onClick={handleClearClick} />
+        <input type="button" value="Check" onClick={handleCheckClick} />
         <input type="button" value="Reset" onClick={handleResetClick} />
         <input type="button" value="Solve" onClick={handleSolveClick} />
       </div>
